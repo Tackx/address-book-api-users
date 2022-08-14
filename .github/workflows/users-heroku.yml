@@ -1,0 +1,21 @@
+name: AB-API-Users - Heroku
+
+on:
+  push:
+    branches: ['master']
+jobs:
+  build:
+    runs-on: [self-hosted, heroku]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: docker compose build --no-cache
+      - name: Start Containers
+        run: docker compose up --detach
+      - name: Amend rights to logs
+        run: docker exec -d users sh -c "chown 2001 -R logs && chgrp 2001 -R logs"
+      - name: Run Tests
+        run: docker exec -t users sh -c "npm test"
+      - name: Decompose Containers
+        run: docker compose down

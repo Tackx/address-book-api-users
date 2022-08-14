@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  address-book-api-network:
+    name: address-book-api-network
+
+services: 
+
+  # Users service
+  users:
+    container_name: users
+    restart: unless-stopped
+    build:
+      context: .
+      target: development
+    env_file: 
+      - .env
+    depends_on:
+      - mongo
+    networks:
+      - address-book-api-network
+    volumes:
+      - ./:/usr/src/users
+      - /usr/src/users/node_modules
+      - users-logs:/usr/src/users/logs
+    command: npm run start:dev
+  
+  # MongoDB service - used by the Users service
+  mongo:
+    image: 'mongo:5.0.9'
+    container_name: mongo
+    restart: unless-stopped
+    env_file: 
+      - .env
+    volumes:
+      - db-data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+    networks:
+      - address-book-api-network
+    command: mongod --quiet --logpath /tmp/mongo.log
+volumes: 
+  db-data:
+  users-logs:
