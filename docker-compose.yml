@@ -9,6 +9,7 @@ services:
   # Users service
   users:
     container_name: users
+    user: 0:0
     restart: unless-stopped
     build:
       context: .
