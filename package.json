@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest --verbose",
     "test:coverage": "jest --coverage",
-    "start": "node dist/server.js",
-    "start:dev": "ts-node-dev --poll src/server.ts",
+    "start": "NODE_ENV=production node dist/server.js",
+    "start:dev": "NODE_ENV=development ts-node-dev --poll src/server.ts",
     "dev": "tsc --watch",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
